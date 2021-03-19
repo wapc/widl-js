@@ -15,13 +15,10 @@
   "author": "Phil Kedy",
   "license": "MIT",
   "engines": {
-    "node": ">=8.5",
-    "npm": ">=6.0",
-    "yarn": "^1.0"
+    "node": ">=8.5"
   },
   "main": "./dist/cjs/index.js",
-  "module": "./dist/esm5/index.js",
-  "es2015": "./dist/esm2015/index.js",
+  "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "browser": "./dist/widl.js",
   "browser-min": "./dist/widl.min.js",
@@ -35,10 +32,9 @@
   "sideEffects": false,
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "npm run build:es2015 && npm run build:es5 && npm run build:cjs && npm run build:umd && npm run build:umd:min",
-    "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015",
-    "build:es5": "tsc --module es2015 --target es5 --outDir dist/es5",
-    "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
+    "build": "npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:umd:min",
+    "build:esm": "tsc --module es2015 --outDir dist/esm",
+    "build:cjs": "tsc --declaration --declarationMap --declarationDir dist/types ",
     "build:umd": "rollup --config config/rollup.config.js",
     "build:umd:min": "cd dist && uglifyjs --compress --mangle --source-map --comments --output widl.min.js -- widl.js",
     "clean": "shx rm -rf dist",
@@ -56,11 +52,8 @@
     "prerelease": "npm run build",
     "release": "standard-version",
     "release:github": "git push --no-verify --follow-tags origin master",
-    "release:npm": "npm publish dist",
+    "release:npm": "npm publish",
     "release:preflight": "npm pack --dry-run"
-  },
-  "peerDependencies": {
-    "tslib": ">=2.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
@@ -75,7 +68,7 @@
     "shx": "0.3.3",
     "standard-version": "4.4.0",
     "ts-jest": "26.5.3",
-    "tslib": "2.1.0",
+    "tslib": "^2.1.0",
     "typedoc": "0.20.32",
     "typescript": "4.1.3",
     "uglify-js": "^3.13.1",

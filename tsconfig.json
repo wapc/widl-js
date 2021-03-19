@@ -1,23 +1,15 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "module": "esnext",
-    "target": "es5",
-    "lib": [
-      "dom",
-      "es2018"
-    ],
+    "module": "CommonJS",
+    "target": "es2015",
+    "lib": ["es2015"],
+    "outDir": "dist/cjs",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
     "sourceMap": true,
     "stripInternal": true,
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "dist/types",
-    "outDir": "dist/esm5",
-    "resolveJsonModule": true,
     "importHelpers": true,
     "plugins": [
       {
@@ -26,8 +18,6 @@
       }
     ]
   },
-  "include": [
-    "./src"
-  ],
+  "include": ["./src"],
   "compileOnSave": false
 }
