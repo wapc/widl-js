@@ -1,2 +1,5 @@
 export * from "./parser";
-export * from "./ast/index";
+
+// Expose `widl.ast` for the browser
+import * as astAll from "./ast/index";
+export const ast = astAll;

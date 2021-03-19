@@ -2,7 +2,7 @@
 
 //import { syntaxError } from '../error/syntaxError';
 
-import { Token, Source } from "./ast/index";
+import { Token, Source } from "./ast";
 import { dedentBlockStringValue } from "./blockstring";
 import { TokenDescription, TokenKind } from "./token_kind";
 import { syntaxError } from "./error";

@@ -1,4 +1,4 @@
-import { Node, Source } from "./ast/index";
+import { Node, Source } from "./ast";
 
 export class WidlError extends Error {
   nodes: Array<Node> | Node | undefined;

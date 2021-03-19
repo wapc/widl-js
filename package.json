@@ -35,9 +35,9 @@
   "sideEffects": false,
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "npm run build:es2015 && npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:umd:min",
+    "build": "npm run build:es2015 && npm run build:es5 && npm run build:cjs && npm run build:umd && npm run build:umd:min",
     "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015",
-    "build:esm": "tsc --module es2015 --target es5 --outDir dist/esm",
+    "build:es5": "tsc --module es2015 --target es5 --outDir dist/es5",
     "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
     "build:umd": "rollup --config config/rollup.config.js",
     "build:umd:min": "cd dist && uglifyjs --compress --mangle --source-map --comments --output widl.min.js -- widl.js",
