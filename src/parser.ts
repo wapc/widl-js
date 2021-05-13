@@ -299,8 +299,11 @@ class Parser {
     const description = this.parseDescription();
     const name = this.parseName();
     const [parameters, isUnary] = this.parseParameterDefinitions(true);
-    this.expectToken(TokenKind.COLON);
-    const type = this.parseType();
+    const colon = this.expectOptionalToken(TokenKind.COLON);
+    let type: Type = new Named(undefined, new Name(undefined, "void"));
+    if (colon) {
+      type = this.parseType();
+    }
     const annotations = this.parseAnnotations();
 
     return new OperationDefinition(

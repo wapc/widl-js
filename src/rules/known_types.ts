@@ -34,6 +34,10 @@ export class KnownTypes extends AbstractVisitor {
   }
   visitOperationAfter(context: Context): void {
     const oper = context.operation!;
+    // "void" is a special case for operations without a return.
+    if (oper.type.isKind(Kind.Named) && (oper.type as Named).name.value == "void") {
+      return
+    }
     this.checkType(
       context,
       `return`,
