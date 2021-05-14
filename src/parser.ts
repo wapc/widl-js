@@ -264,15 +264,10 @@ class Parser {
     if (this.peek(TokenKind.NAME)) {
       switch (this._lexer.token.value) {
         case "namespace":
-          return this.parseNamespaceDefinition();
         case "import":
-          return this.parseImportDefinition();
         case "directive":
-          return this.parseDirectiveDefinition();
         case "interface":
-          return this.parseInterfaceDefinition();
         case "role":
-          return this.parseRoleTypeDefinition();
         case "type":
         case "union":
         case "enum":
@@ -559,6 +554,16 @@ class Parser {
           return this.parseTypeSystemDefinition();
         case String.fromCharCode(TokenKind.NAME):
           return this.parseTypeSystemDefinition();
+        case "namespace":
+          return this.parseNamespaceDefinition();
+        case "import":
+          return this.parseImportDefinition();
+        case "directive":
+          return this.parseDirectiveDefinition();
+        case "interface":
+          return this.parseInterfaceDefinition();
+        case "role":
+          return this.parseRoleTypeDefinition();
         case "type":
           return this.parseTypeDefinition();
         case "union":
@@ -947,7 +952,7 @@ class Parser {
     this.expectKeyword("directive");
     this.expectToken(TokenKind.AT);
     const name = this.parseName();
-    const [args, _] = this.parseParameterDefinitions(false);
+    const params = this.optionalMany(TokenKind.PAREN_L, this.parseParameterDefinition, TokenKind.PAREN_R);
     this.expectKeyword("on");
     const locs = this.parseDirectiveLocations();
     const reqs: DirectiveRequire[] = [];
@@ -963,7 +968,7 @@ class Parser {
       this.loc(start),
       name,
       description,
-      args,
+      params,
       locs,
       reqs
     );
@@ -1153,9 +1158,9 @@ class Parser {
   ): Array<T> {
     if (this.expectOptionalToken(openKind)) {
       const nodes = [];
-      do {
+      while (!this.expectOptionalToken(closeKind)) {
         nodes.push(parseFn.call(this));
-      } while (!this.expectOptionalToken(closeKind));
+      }
       return nodes;
     }
     return [];
