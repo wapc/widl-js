@@ -94,6 +94,14 @@ export function parseValue(source: string, options?: ParseOptions): Value {
   return value;
 }
 
+export function parseType(source: string, options?: ParseOptions): Type {
+  const parser = new Parser(source, undefined, options);
+  parser.expectToken(TokenKind.SOF);
+  const value = parser.parseType();
+  parser.expectToken(TokenKind.EOF);
+  return value;
+}
+
 interface NamedDefinition {
   name: Name;
 }
@@ -160,20 +168,20 @@ class Parser {
         } else {
           const allDefs = new Map<string, Definition>();
           importDoc.definitions.map((def) => {
-            switch (true) {
-              case def.isKind(Kind.TypeDefinition):
+            switch (def.getKind()) {
+              case Kind.TypeDefinition:
                 const type = def as TypeDefinition;
                 allDefs.set(type.name.value, type);
                 break;
-              case def.isKind(Kind.EnumDefinition):
+              case Kind.EnumDefinition:
                 const enumDef = def as EnumDefinition;
                 allDefs.set(enumDef.name.value, enumDef);
                 break;
-              case def.isKind(Kind.UnionDefinition):
+              case Kind.UnionDefinition:
                 const unionDef = def as UnionDefinition;
                 allDefs.set(unionDef.name.value, unionDef);
                 break;
-              case def.isKind(Kind.DirectiveDefinition):
+              case Kind.DirectiveDefinition:
                 const directive = def as DirectiveDefinition;
                 allDefs.set(directive.name.value, directive);
                 break;
@@ -189,8 +197,8 @@ class Parser {
               );
             }
             const name = n.alias || n.name;
-            switch (true) {
-              case def.isKind(Kind.TypeDefinition):
+            switch (def.getKind()) {
+              case Kind.TypeDefinition:
                 const type = def as TypeDefinition;
                 defs.push(
                   new TypeDefinition(
@@ -203,7 +211,7 @@ class Parser {
                   )
                 );
                 break;
-              case def.isKind(Kind.EnumDefinition):
+              case Kind.EnumDefinition:
                 const enumDef = def as EnumDefinition;
                 defs.push(
                   new EnumDefinition(
@@ -215,7 +223,7 @@ class Parser {
                   )
                 );
                 break;
-              case def.isKind(Kind.UnionDefinition):
+              case Kind.UnionDefinition:
                 const unionDef = def as UnionDefinition;
                 defs.push(
                   new UnionDefinition(
@@ -227,7 +235,7 @@ class Parser {
                   )
                 );
                 break;
-              case def.isKind(Kind.DirectiveDefinition):
+              case Kind.DirectiveDefinition:
                 const directive = def as DirectiveDefinition;
                 defs.push(
                   new DirectiveDefinition(
@@ -952,7 +960,11 @@ class Parser {
     this.expectKeyword("directive");
     this.expectToken(TokenKind.AT);
     const name = this.parseName();
-    const params = this.optionalMany(TokenKind.PAREN_L, this.parseParameterDefinition, TokenKind.PAREN_R);
+    const params = this.optionalMany(
+      TokenKind.PAREN_L,
+      this.parseParameterDefinition,
+      TokenKind.PAREN_R
+    );
     this.expectKeyword("on");
     const locs = this.parseDirectiveLocations();
     const reqs: DirectiveRequire[] = [];

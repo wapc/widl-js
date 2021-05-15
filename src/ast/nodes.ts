@@ -57,7 +57,7 @@ export class Annotation extends AbstractNode {
     this.arguments = args || [];
   }
 
-  as<T>(): T {
+  convert<T>(): T {
     let obj: { [k: string]: any } = {};
     this.arguments.map((arg) => {
       obj[arg.name.value] = arg.value.getValue();
