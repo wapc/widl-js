@@ -691,7 +691,7 @@ class Parser {
     }
 
     const name = new Name(this.loc(start), start.value);
-    this.expectToken(TokenKind.EQUALS)
+    this.expectToken(TokenKind.EQUALS);
     const type = this.parseType();
     const annotations = this.parseAnnotations();
     return new AliasDefinition(

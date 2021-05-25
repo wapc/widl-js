@@ -359,7 +359,7 @@ export class InterfaceDefinition extends AbstractNode implements Definition {
     visitor.visitInterfaceBefore(context);
     visitor.visitInterface(context);
 
-    context = context.clone({ operations: context.interface.operations });
+    context = context.clone({ operations: context.interface!.operations });
     visitor.visitOperationsBefore(context);
     context.operations!.map((operation) => {
       operation.accept(context.clone({ operation: operation }), visitor);
