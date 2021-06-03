@@ -328,10 +328,12 @@ export interface Visitor {
   visitTypesAfter(context: Context): void;
 
   visitEnumsBefore(context: Context): void;
+  visitEnumBefore(context: Context): void;
   visitEnum(context: Context): void;
   visitEnumValuesBefore(context: Context): void;
   visitEnumValue(context: Context): void;
   visitEnumValuesAfter(context: Context): void;
+  visitEnumAfter(context: Context): void;
   visitEnumsAfter(context: Context): void;
 
   visitUnionsBefore(context: Context): void;
@@ -652,6 +654,12 @@ export abstract class AbstractVisitor implements Visitor {
   public triggerEnumsBefore(context: Context): void {
     this.triggerCallbacks(context, "EnumsBefore");
   }
+  public visitEnumBefore(context: Context): void {
+    this.triggerEnumsBefore(context);
+  }
+  public triggerEnumBefore(context: Context): void {
+    this.triggerCallbacks(context, "EnumBefore");
+  }
   public visitEnum(context: Context): void {
     this.triggerEnum(context);
   }
@@ -675,6 +683,12 @@ export abstract class AbstractVisitor implements Visitor {
   }
   public triggerEnumValuesAfter(context: Context): void {
     this.triggerCallbacks(context, "EnumValuesAfter");
+  }
+  public visitEnumAfter(context: Context): void {
+    this.triggerEnumsAfter(context);
+  }
+  public triggerEnumAfter(context: Context): void {
+    this.triggerCallbacks(context, "EnumAfter");
   }
   public visitEnumsAfter(context: Context): void {
     this.triggerEnumsAfter(context);

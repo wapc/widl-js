@@ -987,7 +987,7 @@ class Parser {
     const token = this.expectToken(TokenKind.INT);
     const index = new IntValue(this.loc(token), parseInt(token.value));
     let display: StringValue | undefined;
-    if (this.peek(TokenKind.STRING)) {
+    if (this.expectOptionalKeyword("as")) {
       display = this.parseStringLiteral();
     }
 
